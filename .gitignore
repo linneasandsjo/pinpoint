@@ -1,0 +1,33 @@
+# Xcode
+.DS_Store
+xcuserdata/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+
+# Swift Package Manager
+Packages/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+*.lock
+*.xcworkspace
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# General
+*.swp
+*.lock
+*.tmp
+*.bak
+*.orig
