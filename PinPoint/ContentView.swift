@@ -9,13 +9,44 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            FirstView()
+                .tabItem {
+                    Label("Map", systemImage: "map")
+                }
+            
+            SecondView()
+                .tabItem {
+                    Label("Save", systemImage: "heart")
+                }
+            
+            ThirdView()
+                .tabItem {
+                    Label("Friends", systemImage: "person.2")
+                }
         }
-        .padding()
+    }
+}
+
+struct FirstView: View {
+    var body: some View {
+        MapView()
+    }
+}
+
+struct SecondView: View {
+    var body: some View {
+        Text("List over saved items")
+            .font(.largeTitle)
+            .padding()
+    }
+}
+
+struct ThirdView: View {
+    var body: some View {
+        Text("Friends view, activities from friends")
+            .font(.largeTitle)
+            .padding()
     }
 }
 
