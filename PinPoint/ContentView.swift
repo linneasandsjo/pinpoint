@@ -38,8 +38,9 @@ struct FirstView: View {
             ZStack {
                 // Kallar på MapView och skickar in state
                 AppleMapView(selectedPlace: $selectedPlace)
+                    .edgesIgnoringSafeArea([.top])
 
-                // Lägger över din sökvy ovanpå kartan
+                // Lägger över sökvyn ovanpå kartan
                 SearchBarView(searchVM: searchVM, selectedPlace: $selectedPlace)
             }
             // Info-popup i separat vy

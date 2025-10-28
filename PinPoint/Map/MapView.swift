@@ -26,7 +26,32 @@ struct AppleMapView: UIViewRepresentable {
         return mapView
     }
     
-    func updateUIView(_ uiView: MKMapView, context: Context) {}
+    func updateUIView(_ uiView: MKMapView, context: Context) {
+        // När selectedPlace ändras, flytta kartan och sätt pin
+        if let wrapper = selectedPlace {
+            let coordinate = wrapper.mapItem.placemark.coordinate
+            
+            // Flytta kartan
+            let region = MKCoordinateRegion(
+                center: coordinate,
+                latitudinalMeters: 1000,
+                longitudinalMeters: 1000
+            )
+            uiView.setRegion(region, animated: true)
+            
+            // Rensa gamla annotationer
+            uiView.removeAnnotations(uiView.annotations)
+            
+            // Lägg till ny annotation
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = wrapper.mapItem.name
+            uiView.addAnnotation(annotation)
+            
+            // Sluta följa användaren så kartan stannar kvar på platsen
+            uiView.userTrackingMode = .none
+        }
+    }
     
     
     class Coordinator: NSObject, MKMapViewDelegate {

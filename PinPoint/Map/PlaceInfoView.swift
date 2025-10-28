@@ -22,10 +22,6 @@ struct PlaceInfoView: View {
                     .foregroundColor(.secondary)
             }
 
-            if let phone = place.phoneNumber {
-                Text("📞 \(phone)")
-            }
-
             if let url = place.url {
                 Link("🌐 Visit website", destination: url)
             }
