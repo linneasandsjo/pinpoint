@@ -4,6 +4,7 @@
 //
 //  Created by Linnea on 2025-09-26.
 //  Sökresultat/ plats sektionen
+
 import SwiftUI
 import MapKit
 
