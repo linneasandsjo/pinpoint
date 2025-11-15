@@ -31,3 +31,5 @@ fastlane/test_output
 *.tmp
 *.bak
 *.orig
+
+PinPoint/ignore.plist
