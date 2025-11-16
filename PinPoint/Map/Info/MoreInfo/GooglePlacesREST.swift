@@ -6,62 +6,44 @@
 //
 
 import Foundation
-import GooglePlaces
 import CoreLocation
 
-class GooglePlacesService {
-
-    private let client = GMSPlacesClient.shared()
-
-    // 1️⃣ Hitta Google Place ID från koordinater
-    func fetchPlaceID(from coordinate: CLLocationCoordinate2D) async throws -> String? {
-
-        let fields: GMSPlaceField = [.name, .placeID]
-
-        return try await withCheckedThrowingContinuation { continuation in
-            client.findPlaceLikelihoodsFromLocation(
-                coordinate,
-                radius: 50,
-                placeFields: fields
-            ) { likelihoods, error in
-
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-
-                let placeID = likelihoods?.first?.place.placeID
-                continuation.resume(returning: placeID)
-            }
-        }
-    }
-
-    // 2️⃣ Hämta detaljer baserat på Google Place ID
-    func fetchPlaceDetails(placeID: String) async throws -> GMSPlace {
-
-        let fields: GMSPlaceField = [
-            .name,
-            .rating,
-            .formattedAddress,
-            .openingHours,
-            .userRatingsTotal,
-            .photos
-        ]
-
-        return try await withCheckedThrowingContinuation { continuation in
-            client.fetchPlace(
-                fromPlaceID: placeID,
-                placeFields: fields
-            ) { place, error in
-
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                if let place = place {
-                    continuation.resume(returning: place)
-                }
-            }
-        }
+class GooglePlacesREST {
+    static let shared = GooglePlacesREST()
+    private init() {}
+    
+    // Din API-nyckel (lägg den i Secrets/Config senare)
+    private let apiKey = Bundle.main.googleAPIKey
+    
+    /// Tar namn + koordinater → returnerar Google PlaceID
+    func getPlaceID(for name: String, near coordinate: CLLocationCoordinate2D) async throws -> String? {
+        
+        let encodedName = name.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? name
+        
+        let urlString =
+        "https://maps.googleapis.com/maps/api/place/findplacefromtext/json" +
+        "?input=\(encodedName)" +
+        "&inputtype=textquery" +
+        "&locationbias=point:\(coordinate.latitude),\(coordinate.longitude)" +
+        "&fields=place_id" +
+        "&key=\(apiKey)"
+        
+        print("🌐 [REST] FindPlace URL:", urlString)
+        
+        guard let url = URL(string: urlString) else { return nil }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        let response = try JSONDecoder().decode(FindPlaceResponse.self, from: data)
+        
+        return response.candidates.first?.place_id
     }
 }
+    
+    struct FindPlaceResponse: Codable {
+        let candidates: [FindPlaceCandidate]
+    }
+
+    struct FindPlaceCandidate: Codable {
+        let place_id: String
+    }
