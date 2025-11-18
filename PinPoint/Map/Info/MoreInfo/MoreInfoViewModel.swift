@@ -14,48 +14,54 @@ class MoreInfoViewModel: ObservableObject {
     @Published var placeDetails: GMSPlace?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var photos: [UIImage] = []
 
     func loadDetails(for mapKitPlace: MKMapItem) async {
-        print("📌 [VM] Starting loadDetails for:", mapKitPlace.name ?? "Unknown")   // 🔵 LÄGG TILL
-        
         isLoading = true
         defer { isLoading = false }
 
         do {
             // 1. Få koordinater från MapKit
             let coord = mapKitPlace.placemark.coordinate
-            print("📍 [VM] MapKit coord:", coord)   // 🔵 LÄGG TILL
-
 
             // 2. Hämta Google PlaceID via REST
             guard let name = mapKitPlace.name else {
                 errorMessage = "Missing place name."
                 return
             }
-            print(" [VM] Google name:", name)
-
+            
             guard let googleID = try await GooglePlacesREST.shared.getPlaceID(
                 for: name,
                 near: coord
             ) else {
-                print("❌ [VM] Could not get Google PlaceID")   // 🔵 LÄGG TILL
-                
                 errorMessage = "Could not match MapKit place to Google place."
                 return
             }
-            print("🔑 [VM] Google PlaceID:", googleID)   // 🔵 LÄGG TILL
-            
-
+          
             // 3. Hämta detaljer via SDK
             let place = try await GooglePlaceDetailsService.shared.fetchDetails(placeID: googleID)
-            
-            print("🏁 [VM] Final place details:", place)   // 🔵 LÄGG TILL
-
+           
             self.placeDetails = place
+            loadPhotos(from: place)
 
         } catch {
             errorMessage = error.localizedDescription
         }
     }
-}
+    
+    func loadPhotos(from details: GMSPlace) {
+        guard let metadataList = details.photos else { return }
 
+        let maxPhotos = Array(metadataList.prefix(3))  //MAX 3 foton laddas!
+
+        for meta in maxPhotos {
+            GMSPlacesClient.shared().loadPlacePhoto(meta) { image, error in
+                if let image = image {
+                    Task { @MainActor in
+                        self.photos.append(image)
+                    }
+                }
+            }
+        }
+    }
+}

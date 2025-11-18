@@ -12,7 +12,6 @@ class GooglePlaceDetailsService {
     private init() {}
 
     func fetchDetails(placeID: String) async throws -> GMSPlace {
-        print("➡️ [SDK] Fetching details for PlaceID:", placeID) //debug
         
         return try await withCheckedThrowingContinuation { continuation in
 
