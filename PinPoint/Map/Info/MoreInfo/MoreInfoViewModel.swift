@@ -52,7 +52,7 @@ class MoreInfoViewModel: ObservableObject {
     func loadPhotos(from details: GMSPlace) {
         guard let metadataList = details.photos else { return }
 
-        let maxPhotos = Array(metadataList.prefix(3))  //MAX 3 foton laddas!
+        let maxPhotos = Array(metadataList.prefix(1))  //MAX 1 foto laddas!
 
         for meta in maxPhotos {
             GMSPlacesClient.shared().loadPlacePhoto(meta) { image, error in

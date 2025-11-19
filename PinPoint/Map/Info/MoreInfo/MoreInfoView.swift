@@ -25,25 +25,39 @@ struct MoreInfoView: View {
                     
                     let rating = details.rating
                     if rating > 0 {
-                        Text("Google Rating \(rating, specifier: "%.1f")")
+                        HStack {
+                            Text("\(rating, specifier: "%.1f")")
+                            Image(systemName: "star.fill").foregroundColor(.yellow)
+                            Text("(Source: Google)").foregroundColor(.gray)
+
+                        }
                     }
                     else {
-                        Text("No rating available")
+                        HStack {
+                            Image(systemName: "star.fill")
+                            Text("No rating available")
+                        }
                     }
-
                     
-                    if let hours = details.openingHours?.weekdayText {
-                        ForEach(hours, id: \.self) { day in
-                            Text(day)
+                    if let today = details.openingHours?.todayText() {
+                        HStack {
+                            Image(systemName: "clock")
+                            Text(today)
                         }
                     }
                     
                     if let phoneNumber = details.phoneNumber {
-                        Text("Phone: \(phoneNumber)")
+                        HStack {
+                            Image(systemName: "phone")
+                            Text("\(phoneNumber)")
+                        }
                     }
                     
                     if let website = details.website {
-                        Link("Visit website", destination: website)
+                        HStack {
+                            Image(systemName: "globe")
+                            Link("Visit website", destination: website)
+                        }
                     }
                     
                     if !vm.photos.isEmpty {
