@@ -39,11 +39,8 @@ struct MoreInfoView: View {
                         }
                     }
                     
-                    if let today = details.openingHours?.todayText() {
-                        HStack {
-                            Image(systemName: "clock")
-                            Text(today)
-                        }
+                    if let hours = details.openingHours {
+                        OpeningHoursView(hours: hours)
                     }
                     
                     if let phoneNumber = details.phoneNumber {
