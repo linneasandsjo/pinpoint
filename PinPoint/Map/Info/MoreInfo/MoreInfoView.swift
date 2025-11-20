@@ -23,21 +23,7 @@ struct MoreInfoView: View {
 
                 VStack(alignment: .leading, spacing: 8) {
                     
-                    let rating = details.rating
-                    if rating > 0 {
-                        HStack {
-                            Text("\(rating, specifier: "%.1f")")
-                            Image(systemName: "star.fill").foregroundColor(.yellow)
-                            Text("(Source: Google)").foregroundColor(.gray)
-
-                        }
-                    }
-                    else {
-                        HStack {
-                            Image(systemName: "star.fill")
-                            Text("No rating available")
-                        }
-                    }
+                    ReviewsInfoView(rating: details.rating)
                     
                     if let hours = details.openingHours {
                         OpeningHoursView(hours: hours)
@@ -57,19 +43,8 @@ struct MoreInfoView: View {
                         }
                     }
                     
-                    if !vm.photos.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(vm.photos.indices, id: \.self) { index in
-                                    Image(uiImage: vm.photos[index])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 250, height: 180)
-                                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        .shadow(radius: 4)
-                                }
-                            }
-                        }
+                    if !vm.photos.isEmpty{
+                        PhotosView(photos: vm.photos)
                     }
                 }
 
