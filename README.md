@@ -1,13 +1,14 @@
 # 📍 PinPoint  
-*A personal SwiftUI side project built alongside my ICT engineering studies*
+*An iOS app for discovering places, saving favorites, and exploring curated lists from friends.*  
 
 ## Overview  
-**PinPoint** is a side project alongside my ICT engineering studies at LTH**.  
+**PinPoint** is a side project alongside my ICT engineering studies.  
 I wanted to challenge myself with a project that combines **interaction design**,  
 **mobile app development**, and **real-time data**, while also being genuinely useful  
 in everyday life.
 
 The result is an iOS app that helps users explore and keep track of meaningful places.
+Currently under active development — planned for release in May 2026.
 
 ---
 
