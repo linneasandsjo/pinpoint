@@ -61,7 +61,7 @@ struct AppleMapView: UIViewRepresentable {
             self.parent = parent
         }
         
-        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        /*func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             guard let annotation = view.annotation else { return }
             
             // Hämta MKMapItem från annotationens koordinat
@@ -69,7 +69,29 @@ struct AppleMapView: UIViewRepresentable {
             let item = MKMapItem(placemark: placemark)
 
             parent.selectedPlace = MKMapItemWrapper(mapItem: item)
+        }*/
+        
+        //för att kunna klicka på pins på kartan
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            guard let annotation = view.annotation else { return }
+
+            // 1. Apple Maps POI (MKMapFeatureAnnotation)
+            if #available(iOS 16.0, *),
+               let featureAnnotation = annotation as? MKMapFeatureAnnotation {
+
+                if let mapItem = featureAnnotation.value(forKey: "mapItem") as? MKMapItem {
+                    parent.selectedPlace = MKMapItemWrapper(mapItem: mapItem)
+                }
+                return
         }
+
+        // 2. Fallback för egna annotationer
+        let placemark = MKPlacemark(coordinate: annotation.coordinate)
+        let item = MKMapItem(placemark: placemark)
+        parent.selectedPlace = MKMapItemWrapper(mapItem: item)
+}
+        
+        
     }
 }
 
@@ -89,3 +111,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("Current location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
     }
 }
+
