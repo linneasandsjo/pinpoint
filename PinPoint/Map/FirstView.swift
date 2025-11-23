@@ -28,22 +28,5 @@ struct FirstView: View {
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
                 }
-        /*.onChange(of: selectedPlace) { newValue in
-            if newValue != nil {
-                showPlaceInfo = true
-            }
-        }
-        .sheet(isPresented: $showPlaceInfo) {
-            if let place = selectedPlace?.mapItem {
-                PlaceInfoView(place: place)
-            }
-        }
-        .sheet(item: $selectedPlace) { wrapper in
-            NavigationStack {
-                PlaceInfoView(place: wrapper.mapItem)
-            }
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
-        }*/
     }
 }

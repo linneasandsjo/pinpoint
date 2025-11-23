@@ -12,13 +12,19 @@ struct SearchTextField: View {
     var isSearching: Bool
     var onFocus: () -> Void
     
+    @FocusState private var focused: Bool
+    
     var body: some View {
-        TextField("Search place…", text: $query, onEditingChanged: { editing in
-            if editing { onFocus() }
-        })
-        .padding(12)
-        .background(isSearching ? Color(.systemGray5) : Color.white)
-        .cornerRadius(10)
-        .padding(.horizontal)
+        TextField("Search place…", text: $query)
+            .focused($focused)
+            .onChange(of: focused) { newValue in
+                if newValue {
+                    onFocus()
+                }
+            }
+            .padding(12)
+            .background(isSearching ? Color(.systemGray5) : Color.white)
+            .cornerRadius(10)
+            .padding(.horizontal)
     }
 }
