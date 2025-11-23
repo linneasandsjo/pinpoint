@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3DB3394F2EB28B1B001FB289 /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = 3DB3394E2EB28B1B001FB289 /* GooglePlaces */; };
+		3DB339512EB28B1B001FB289 /* GooglePlacesSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3DB339502EB28B1B001FB289 /* GooglePlacesSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3DAC74D82E77844A001F4FDF /* PinPoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PinPoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DB3394F2EB28B1B001FB289 /* GooglePlaces in Frameworks */,
+				3DB339512EB28B1B001FB289 /* GooglePlacesSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +40,7 @@
 			isa = PBXGroup;
 			children = (
 				3DAC74DA2E77844A001F4FDF /* PinPoint */,
+				3DB3394C2EB287F9001FB289 /* Frameworks */,
 				3DAC74D92E77844A001F4FDF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +51,13 @@
 				3DAC74D82E77844A001F4FDF /* PinPoint.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3DB3394C2EB287F9001FB289 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,6 +80,8 @@
 			);
 			name = PinPoint;
 			packageProductDependencies = (
+				3DB3394E2EB28B1B001FB289 /* GooglePlaces */,
+				3DB339502EB28B1B001FB289 /* GooglePlacesSwift */,
 			);
 			productName = PinPoint;
 			productReference = 3DAC74D82E77844A001F4FDF /* PinPoint.app */;
@@ -94,6 +111,9 @@
 			);
 			mainGroup = 3DAC74CF2E778449001F4FDF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3DB3394D2EB28B1B001FB289 /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3DAC74D92E77844A001F4FDF /* Products */;
 			projectDirPath = "";
@@ -343,6 +363,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3DB3394D2EB28B1B001FB289 /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3DB3394E2EB28B1B001FB289 /* GooglePlaces */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3DB3394D2EB28B1B001FB289 /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
+			productName = GooglePlaces;
+		};
+		3DB339502EB28B1B001FB289 /* GooglePlacesSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3DB3394D2EB28B1B001FB289 /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
+			productName = GooglePlacesSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3DAC74D02E778449001F4FDF /* Project object */;
 }

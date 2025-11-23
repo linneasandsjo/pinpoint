@@ -11,92 +11,67 @@ import MapKit
 struct SearchBarView: View {
     @ObservedObject var searchVM: SearchViewModel
     @Binding var selectedPlace: MKMapItemWrapper?
-    
+
     @State private var query = ""
     @State private var isSearching = false
-    
+    @FocusState private var searchFieldFocused: Bool
+
     var body: some View {
         ZStack(alignment: .top) {
-            Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            if isSearching {
-                                isSearching = false
-                                hideKeyboard()
-                            }
-                        }
-            
-            mainContent
-            
+
+            // Main content when not searching
+            SearchMainContent(
+                query: $query,
+                isSearching: isSearching,
+                searchFieldFocused: $searchFieldFocused,
+                onStartSearching: startSearching
+            )
+            .allowsHitTesting(!isSearching)
+
+            // Tap outside to close
             if isSearching {
-                searchOverlay
+                Color.black.opacity(0.001)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        searchFieldFocused = false
+                        hideKeyboard()
+                        withAnimation(.easeInOut) { isSearching = false }
+                    }
             }
-        }
-        .onChange(of: query) { newValue in
-            handleQueryChange(newValue)
+
+            // Overlay when searching
+            if isSearching {
+                SearchOverlayView(
+                    query: $query,
+                    results: searchVM.results,
+                    searchFieldFocused: $searchFieldFocused,
+                    onSelect: handlePlaceSelection
+                )
+                .transition(.move(edge: .top))
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+            }
         }
         .animation(.easeInOut, value: isSearching)
+        .onChange(of: query, perform: handleQueryChange)
     }
 }
 
-//när användaren inte söker
-private extension SearchBarView {
-    var mainContent: some View {
-        VStack(spacing: 12) {
-            SearchTextField(query: $query, isSearching: isSearching) {
-                isSearching = true
-            }
-            Spacer()
-        }
+// MARK: - Handlers
+extension SearchBarView {
+    private func startSearching() {
+        isSearching = true
+        searchFieldFocused = true
     }
-}
 
-//Overlay som visas när användaren söker
-private extension SearchBarView {
-    var searchOverlay: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .top) {
-                overlayBackground(in: geo)
-                
-                VStack(spacing: 16) {
-                    SearchTextField(query: $query, isSearching: true) {}
-                    
-                    InspirationSection()
-                    
-                    PlacesSection(
-                        query: query,
-                        results: searchVM.results,
-                        onSelect: handlePlaceSelection
-                    )
-                    
-                    Spacer()
-                }
-                .padding(.top, 16)
-            }
-            .frame(height: UIScreen.main.bounds.height * 0.80)
-        }
-    }
-    
-    func overlayBackground(in geo: GeometryProxy) -> some View {
-        Color(.systemGray6)
-            .opacity(0.98)
-            .edgesIgnoringSafeArea(.top)
-            .frame(width: geo.size.width,
-                   height: geo.size.height * 0.80)
-    }
-    
-}
-
-private extension SearchBarView {
-    func handleQueryChange(_ newValue: String) {
+    private func handleQueryChange(_ newValue: String) {
         if !newValue.isEmpty {
             searchVM.search(for: newValue)
         } else {
             searchVM.results = []
         }
     }
-    
-    func handlePlaceSelection(_ item: MKMapItem) {
+
+    private func handlePlaceSelection(_ item: MKMapItem) {
         selectedPlace = MKMapItemWrapper(mapItem: item)
         isSearching = false
     }
@@ -110,4 +85,5 @@ extension View {
     }
 }
 #endif
+
 
