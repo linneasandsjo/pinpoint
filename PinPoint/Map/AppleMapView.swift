@@ -23,6 +23,9 @@ struct AppleMapView: UIViewRepresentable {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow // följer användarens position
         mapView.delegate = context.coordinator
+        
+        mapView.pointOfInterestFilter = .includingAll
+
         return mapView
     }
     
@@ -61,37 +64,38 @@ struct AppleMapView: UIViewRepresentable {
             self.parent = parent
         }
         
-        /*func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            guard let annotation = view.annotation else { return }
-            
-            // Hämta MKMapItem från annotationens koordinat
-            let placemark = MKPlacemark(coordinate: annotation.coordinate)
-            let item = MKMapItem(placemark: placemark)
-
-            parent.selectedPlace = MKMapItemWrapper(mapItem: item)
-        }*/
-        
-        //för att kunna klicka på pins på kartan
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             guard let annotation = view.annotation else { return }
 
-            // 1. Apple Maps POI (MKMapFeatureAnnotation)
-            if #available(iOS 16.0, *),
-               let featureAnnotation = annotation as? MKMapFeatureAnnotation {
-
-                if let mapItem = featureAnnotation.value(forKey: "mapItem") as? MKMapItem {
-                    parent.selectedPlace = MKMapItemWrapper(mapItem: mapItem)
-                }
+            // 1. Ignorera användarens blå punkt
+            if annotation is MKUserLocation {
                 return
-        }
+            }
 
-        // 2. Fallback för egna annotationer
-        let placemark = MKPlacemark(coordinate: annotation.coordinate)
-        let item = MKMapItem(placemark: placemark)
-        parent.selectedPlace = MKMapItemWrapper(mapItem: item)
-}
-        
-        
+            // 2. Försök hämta riktig platsinfo genom lokal sökning
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = annotation.title ?? ""
+            request.region = MKCoordinateRegion(
+                center: annotation.coordinate,
+                latitudinalMeters: 500,
+                longitudinalMeters: 500
+            )
+
+            MKLocalSearch(request: request).start { response, error in
+                if let item = response?.mapItems.first {
+                    // Vi fick en riktig plats → använd den
+                    self.parent.selectedPlace = MKMapItemWrapper(mapItem: item)
+                    return
+                }
+
+                // 3. Fallback om ingen riktig plats hittades
+                let placemark = MKPlacemark(coordinate: annotation.coordinate)
+                let fallbackItem = MKMapItem(placemark: placemark)
+                fallbackItem.name = annotation.title ?? "Unknown Place"
+
+                self.parent.selectedPlace = MKMapItemWrapper(mapItem: fallbackItem)
+            }
+        }
     }
 }
 

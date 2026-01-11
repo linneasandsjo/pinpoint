@@ -8,7 +8,7 @@ import SwiftUI
 import MapKit
 
 struct FirstView: View {
-    @StateObject private var locationManager = LocationManager()
+    //@StateObject private var locationManager = LocationManager()
     @StateObject private var searchVM = SearchViewModel()
 
     @State private var selectedPlace: MKMapItemWrapper?
