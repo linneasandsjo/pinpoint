@@ -8,9 +8,10 @@ struct PlaceInfoBaseView<Content: View>: View {
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - Placeholder states (ersätts med riktig databas senare)
-    @State private var isSavedByUser = false
+    //@State private var isSavedByUser = false
     @State private var isSavedByFriends = false
-    @State private var placeTitle: String = ""
+    
+    //private let placeService = PlaceService.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -29,7 +30,9 @@ struct PlaceInfoBaseView<Content: View>: View {
                 }
             }
 
-            // Sparstatus (placeholder just nu)
+            SavePlaceButton(place: place)
+
+            /*// Sparstatus (placeholder just nu)
             if isSavedByUser {
                 Label("Added to your list", systemImage: "heart.fill")
                     .foregroundColor(.pink)
@@ -38,7 +41,7 @@ struct PlaceInfoBaseView<Content: View>: View {
                 Label("Add to your list", systemImage: "heart")
                     .foregroundColor(.pink)
                     .font(.subheadline)
-            }
+            }*/
             
             if isSavedByFriends {
                 Label("Friends have saved this place", systemImage: "person.2.fill")
@@ -57,15 +60,17 @@ struct PlaceInfoBaseView<Content: View>: View {
             Spacer()
         }
         .padding()
-        .onAppear {
+        /*.onAppear {
             loadBasicInfo()
-        }
+        }*/
     }
 
-    // MARK: - Simulerad databasfunktion (ersätts senare)
-    private func loadBasicInfo() {
-        // Placeholder för sparstatus — senare hämtas från databas
-        isSavedByUser = Bool.random()
-        isSavedByFriends = Bool.random()
-    }
+    /*private func loadBasicInfo() {
+        let placeId =
+            "\(place.placemark.coordinate.latitude)_\(place.placemark.coordinate.longitude)"
+
+        Task {
+            isSavedByUser = (try? await placeService.isPlaceSaved(placeId: placeId)) ?? false
+        }
+    }*/
 }

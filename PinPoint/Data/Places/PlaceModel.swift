@@ -5,6 +5,7 @@
 //  Created by Linnea on 2026-01-11.
 //
 import Foundation
+import MapKit
 
 struct PlaceModel: Identifiable, Codable {
     let id: String
@@ -12,5 +13,12 @@ struct PlaceModel: Identifiable, Codable {
     let latitude: Double
     let longitude: Double
     let createdAt: Date
-    let createdBy: String
+
+    init(mapItem: MKMapItem) {
+        self.id = "\(mapItem.placemark.coordinate.latitude)_\(mapItem.placemark.coordinate.longitude)"
+        self.name = mapItem.name ?? "Unknown place"
+        self.latitude = mapItem.placemark.coordinate.latitude
+        self.longitude = mapItem.placemark.coordinate.longitude
+        self.createdAt = Date()
+    }
 }
