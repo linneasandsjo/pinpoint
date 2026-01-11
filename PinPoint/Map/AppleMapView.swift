@@ -4,7 +4,6 @@
 //
 //  Created by Linnea on 2025-09-23.
 // Using Apples MapKit
-
 import SwiftUI
 import MapKit
 import CoreLocation

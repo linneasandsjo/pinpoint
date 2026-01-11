@@ -7,18 +7,26 @@
 
 import SwiftUI
 import GooglePlaces
+import Firebase
 
 @main
 struct PinPointApp: App {
+    @StateObject var appState = AppState()
+
     
     init() {
+        FirebaseApp.configure()
         // Ladda Google Places API-nyckeln från ignore.plist
         GMSPlacesClient.provideAPIKey(Bundle.main.googleAPIKey)
     }
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if appState.isLoggedIn {
+                ContentView()
+            } else {
+                LoginView()
+            }
         }
     }
 }
