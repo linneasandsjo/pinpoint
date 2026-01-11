@@ -23,6 +23,9 @@ struct AppleMapView: UIViewRepresentable {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow // följer användarens position
         mapView.delegate = context.coordinator
+        
+        mapView.pointOfInterestFilter = .includingAll
+
         return mapView
     }
     
@@ -93,43 +96,6 @@ struct AppleMapView: UIViewRepresentable {
                 self.parent.selectedPlace = MKMapItemWrapper(mapItem: fallbackItem)
             }
         }
-        
-        /*func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            guard let annotation = view.annotation else { return }
-            
-            // Hämta MKMapItem från annotationens koordinat
-            let placemark = MKPlacemark(coordinate: annotation.coordinate)
-            let item = MKMapItem(placemark: placemark)
-
-            parent.selectedPlace = MKMapItemWrapper(mapItem: item)
-        }*/
-        
-        //för att kunna klicka på pins på kartan
-        /*func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            guard let annotation = view.annotation else { return }
-
-            if annotation is MKUserLocation {
-                return
-            }
-            
-            // 1. Apple Maps POI (MKMapFeatureAnnotation)
-            if #available(iOS 16.0, *),
-               let featureAnnotation = annotation as? MKMapFeatureAnnotation {
-
-                if let mapItem = featureAnnotation.mapItem {
-                            parent.selectedPlace = MKMapItemWrapper(mapItem: mapItem)
-                            return
-                        }
-                return
-        }
-
-        // 2. Fallback för egna annotationer
-        let placemark = MKPlacemark(coordinate: annotation.coordinate)
-        let item = MKMapItem(placemark: placemark)
-        parent.selectedPlace = MKMapItemWrapper(mapItem: item)
-        }*/
-        
-        
     }
 }
 
