@@ -116,3 +116,76 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 }
 
+import SwiftUI
+import MapKit
+
+/*struct AppleMapView: View {
+    @Binding var selectedPlace: MKMapItemWrapper?
+
+    @State private var camera: MapCameraPosition = .automatic
+    @State private var searchResults: [MKMapItem] = []
+    @State private var selectedFeature: MapFeature? = nil
+
+    var body: some View {
+        Map(position: $camera,
+            interactionModes: .all,
+            selection: $selectedFeature
+        ) {
+
+            // Visa dina sökresultat som klickbara
+            ForEach(searchResults, id: \.self) { item in
+                Annotation(item.name ?? "Plats",
+                           coordinate: item.placemark.coordinate) {
+                    ZStack {
+                        Circle()
+                            .fill(.blue)
+                            .frame(width: 12, height: 12)
+                    }
+                }
+                .mapItem(item) // <-- Kopplar annotationen till MKMapItem
+            }
+        }
+
+        // Endast POIs från Apple ska vara klickbara
+        .mapFeatureSelectionDisabled { feature in
+            feature.kind != .pointOfInterest
+        }
+
+        // Visar Apples egna infoblad automatiskt
+        .mapFeatureSelectionAccessory(.automatic)
+
+        // När användaren trycker på en Apple POI
+        .sheet(item: $selectedFeature) { feature in
+            if let item = feature.mapItem {
+                MapItemDetail(item)
+            }
+        }
+
+        // När användaren trycker på en av dina egna sökresultat
+        .sheet(item: $selectedPlace) { wrapper in
+            PlaceInfoView(place: wrapper.mapItem)
+        }
+
+        .onAppear { loadInitialPOIs() }
+    }
+
+    func loadInitialPOIs() {
+        let region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 55.7047, longitude: 13.1910),
+            latitudinalMeters: 5000,
+            longitudinalMeters: 5000
+        )
+
+        let req = MKLocalSearch.Request()
+        req.region = region
+        req.pointOfInterestFilter = .includingAll
+
+        MKLocalSearch(request: req).start { resp, _ in
+            if let items = resp?.mapItems {
+                searchResults = items
+            }
+        }
+    }
+}*/
+
+
